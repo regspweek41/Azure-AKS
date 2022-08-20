@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: middleware
+  labels:
+    app: middleware
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: middleware
+  template:
+    metadata:
+      labels:
+        app: middleware
+    spec:
+      containers:
+      - name: middleware
+        image: projectregistry422.azurecr.io/mysqljava/webapp:#{buildNo}#
+        env:
+        - name: api_env
+          value: "azure-uat"
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: acr-secret
