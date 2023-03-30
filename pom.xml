@@ -94,25 +94,7 @@
 			</plugin>
 
 			<!-- Docker -->
-			<plugin>
-				<groupId>com.spotify</groupId>
-				<artifactId>dockerfile-maven-plugin</artifactId>
-				<version>1.4.10</version>
-				<executions>
-					<execution>
-						<id>default</id>
-						<goals>
-							<goal>build</goal>
-							<!-- <goal>push</goal> --> 
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<repository>in28min/${project.artifactId}</repository>
-					<tag>${project.version}</tag>
-					<skipDockerInfo>true</skipDockerInfo>
-				</configuration>
-			</plugin>
+			
 		</plugins>
 	</build>
 
