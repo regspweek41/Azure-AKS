@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: middleware
+  labels:
+    app: middleware
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: middleware
+  template:
+    metadata:
+      labels:
+        app: middleware
+    spec:
+      containers:
+      - name: middleware
+        image: adoacr1000.azurecr.io/backend/java:#{buildNo}#
+        env:
+        - name: api_env
+          value: #{api_env}#
+        - name: RDS_HOSTNAME
+          valueFrom:
+            secretKeyRef:
+              name: dbdetails
+              key: RDS_HOSTNAME
+        - name: RDS_PORT
+          valueFrom:
+            secretKeyRef:
+              name: dbdetails
+              key: RDS_PORT
+        - name: RDS_DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: dbdetails
+              key: RDS_DB_NAME
+        - name: RDS_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: dbdetails
+              key: RDS_USERNAME
+        - name: RDS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: dbdetails
+              key: RDS_PASSWORD
+        ports:
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: acr-secret
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: middleware-hpa
+spec:
+  maxReplicas: 8
+  minReplicas: 2
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: middleware
+  targetCPUUtilizationPercentage: 70
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: middleware
+spec:
+  selector:
+    app: middleware
+  ports:
+  - protocol: TCP
+    port: 8080
+    targetPort: 8080
+
