@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: middleware
-          image: acr201new.azurecr.io/webapp/java:311
+        image: acr201new.azurecr.io/webapp/java:311
         env:
         - name: api_env
           value: #{api_env}#
