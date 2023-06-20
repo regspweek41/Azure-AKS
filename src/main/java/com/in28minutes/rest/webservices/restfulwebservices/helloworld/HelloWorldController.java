@@ -24,4 +24,8 @@ public class HelloWorldController {
 		//throw new RuntimeException("Something went wrong");
 		return new HelloWorldBean(String.format("Hello World, %s", name));
 	}
+	@GetMapping()
+	public boolean helloWorld1() {
+		return true;
+	}
 }
