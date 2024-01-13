@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-backend-java-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: backend-java-app
+  template:
+    metadata:
+      labels:
+        app: backend-java-app
+    spec:
+      containers:
+      - name: my-backend-java-app
+        image: project231.azurecr.io/services/springboot-app:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8081
+# service type loadbalancer       
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: backend-java-app
+    k8s-app: backend-java-app
+  name: backend-java-app
+spec:
+  ports:
+  - name: http
+    port: 80
+    protocol: TCP
+    targetPort: 8081
+  type: LoadBalancer
+  selector:
+    app: backend-java-app
