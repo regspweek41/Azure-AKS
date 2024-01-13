@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: middleware
-  namespace: ingress-basic
+  namespace: default
   labels:
     app: middleware
 spec:
