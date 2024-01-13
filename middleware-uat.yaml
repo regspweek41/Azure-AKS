@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: middleware
-        image: projectacr23.azurecr.io/docker-springboot:#{buildNo}#
+        image: project231.azurecr.io/services/springboot-app:latest
         env:
         - name: api_env
           value: #{api_env}#
