@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: internal-nginx
+  namespace: ingress-basic
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /middleware
+        pathType: Prefix
+        backend:
+          service:
+            name: middleware-svc
+            port:
+              number: 8080  
+      - path: /mobility
+        pathType: Prefix
+        backend:
+          service:
+            name: mobility
+            port:
+              number: 8081
