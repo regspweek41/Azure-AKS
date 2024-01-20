@@ -4,11 +4,12 @@ Ingress-Setup
 az network vnet check-ip-address --name Docker-project-SG-vnet -g Docker-Project --ip-address 10.90.1.180
 
 
-kubectl create namespace ingress
+kubectl create namespace ingress-basi
 
 helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
 
+// Internal Nginx 
 
   helm install ingress-nginx ingress-nginx/ingress-nginx \
     --version 4.7.1 \
@@ -22,6 +23,8 @@ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
     --set controller.admissionWebhooks.patch.image.digest="" \
     --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux
 
+
+// External Nginx 
 
 helm install publicingress ingress-nginx/ingress-nginx \
   --version 4.1.3 \
