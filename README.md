@@ -24,6 +24,37 @@ helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
     --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux
 
 
+---- internal-nginx ------
+
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: internal-nginx
+  namespace: ingress-basic
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: nginx
+  rules:
+  - http:
+      paths:
+      - path: /middleware
+        pathType: Prefix
+        backend:
+          service:
+            name: middleware-svc
+            port:
+              number: 8080  
+      - path: /mobility
+        pathType: Prefix
+        backend:
+          service:
+            name: mobility
+            port:
+              number: 8081
+
+
 // External Nginx 
 
 helm install publicingress ingress-nginx/ingress-nginx \
@@ -38,3 +69,32 @@ helm install publicingress ingress-nginx/ingress-nginx \
   --set controller.ingressClassResource.controllerValue="k8s.io/publicingress" \
   --set controller.service.annotations."service\.beta\.kubernetes\.io/azure-load-balancer-health-probe-request-path"=/healthz \
   --set defaultBackend.nodeSelector."kubernetes\.io/os"=linux
+
+  ---External-nginx ------
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: external-nginx
+  namespace: ingress-basic
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  ingressClassName: publicingress
+  rules:
+  - http:
+      paths:
+      - path: /middleware
+        pathType: Prefix
+        backend:
+          service:
+            name: middleware-svc
+            port:
+              number: 8080  
+      - path: /mobility
+        pathType: Prefix
+        backend:
+          service:
+            name: mobility
+            port:
+              number: 8081
